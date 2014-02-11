@@ -14,8 +14,8 @@ else
     url = URI.parse("https://api.pushover.net/1/messages.json")
     req = Net::HTTP::Post.new(url.path)
     req.set_form_data({
-        :token => "<app token>",
-        :user => "<user token>",
+        :token => "aRspNBTNXPBJ88G5d8jac1y9TPt6Jb",
+        :user => "fgMD9gob4JXhZZzSLTB9BOAF6kj2Fm",
         :message => message,
     })
     res = Net::HTTP.new(url.host, url.port)
