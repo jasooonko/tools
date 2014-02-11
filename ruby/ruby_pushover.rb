@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require "net/https"
 
 if ARGV.size != 1
