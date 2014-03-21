@@ -13,7 +13,7 @@ feeds = {   most_recent:    'http://s31.dlnws.com/dealnews/rss/todays-edition.xm
             slickdeals:     'http://feeds.feedburner.com/SlickdealsnetForums-9?format=xml',
             fatwallet:      'http://feeds.feedburner.com/FatwalletHotDeals?format=xml',
         }
-config_file = 'dealnews.conf'
+config_file = '.config/dealnews.conf'
 
 params = {}
 opt_parser = OptionParser.new do |opt|

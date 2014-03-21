@@ -9,7 +9,7 @@ require 'optparse'
 feeds = {   google_news:   'https://news.google.com/?output=rss',
             nytimes:       'http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
         }
-config_file = 'news.conf'
+config_file = '.config/news.conf'
 
 params = {}
 opt_parser = OptionParser.new do |opt|
