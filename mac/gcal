@@ -1,0 +1,62 @@
+#!/usr/bin/env ruby
+
+
+require 'rubygems'
+require 'google_calendar'
+require 'date'
+require 'time'
+require 'rss'
+require 'colorize'
+require 'yaml'
+
+CONFIG = YAML.load_file("/Users/ko/.config/gcal.yaml")['config']
+
+cal = Google::Calendar.new(:username => CONFIG['username'],
+        :password => CONFIG['password'],
+        :app_name => 'jasooonko.com-googlecalendar-integration')
+
+#event = cal.create_event do |e|
+#e.title = 'A Cool Event'
+#e.start_time = Time.now
+#e.end_time = Time.now + (60 * 60) # seconds * min
+#end
+
+#puts event[0]
+
+#event = cal.find_or_create_event_by_id(event.id) do |e|
+#e.title = 'An Updated Cool Event'
+#e.end_time = Time.now + (60 * 60 * 2) # seconds * min * hours
+#end
+
+#puts event[0]
+
+# All events
+today = DateTime.now
+max = DateTime.now + 3
+
+events = cal.find_events_in_range(today, max) 
+events.sort! { |a,b| a.start_time <=> b.start_time }
+cur_day = today.to_date
+new_day = max.to_date
+
+events.each do |event|
+    
+    date = new_day = DateTime.iso8601(event.start_time)
+    if(!(cur_day === new_day.to_date))
+        puts "\n>> #{new_day.to_date}".blue
+        cur_day = new_day.to_date
+    end
+    if(cur_day === today.to_date)
+        print '(TODAY) '.yellow
+    end
+    if(!event.all_day?)    
+        puts date.strftime("%m/%d %I:%M%p") + ": " +  event.title
+    else
+        puts "All Day (#{date.to_date}): " + event.title
+    end
+    
+end
+puts "\n>> END <<\n".red
+# Query events
+#puts cal.find_events('my search string')
+#
