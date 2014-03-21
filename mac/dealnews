@@ -9,6 +9,10 @@ require 'optparse'
 most_recent='http://s31.dlnws.com/dealnews/rss/todays-edition.xml'
 most_popular='http://s31.dlnws.com/dealnews/rss/popular.xml'
 editor_choice='http://s31.dlnws.com/dealnews/rss/editors-choice.xml'
+techbargains='http://www.techbargains.com/rss.xml'
+slickdeals='http://feeds.feedburner.com/SlickdealsnetForums-9?format=xml'
+fatwallet='http://feeds.feedburner.com/FatwalletHotDeals?format=xml'
+
 config_file = 'dealnews.conf'
 
 params = {}
@@ -37,9 +41,7 @@ elsif (params[:rss] == 'editor_choice')
     params[:rss] = editor_choice
 else
     params[:rss] = most_popular
-end
-if(!params.key?(:time))
-    params[:time] = 480
+    params[:rss] = [most_recent, techbargains, fatwallet, slickdeals]
 end
 begin
     last_read = DateTime.strptime(File.read(config_file),'%FT%T%:z')
@@ -48,17 +50,24 @@ rescue
 end
     puts 'last read: ' + last_read.to_s.blue
 puts params
-rss = RSS::Parser.parse(params[:rss], false)
-range = DateTime.now - ((1.0/24/60)*params[:time])
+range = last_read
+if(params.key?(:time))
+    range = DateTime.now - ((1.0/24/60)*params[:time])
+end
+
 File.open(config_file, 'w') {|f| f.write(DateTime.now)}
-rss.items[0..50].each do |item|
-    date = item.pubDate.to_datetime
-    if(date > range)
-        if(date > last_read)
-            puts "#{date.strftime("%m/%d %I:%M%p")} - " + item.title.yellow
-            puts ' - ' + item.link
-        else
-            puts "#{date.strftime("%m/%d %I:%M%p")} - " + item.title
+params[:rss].each do |rss_url|
+    rss = RSS::Parser.parse(rss_url, false)
+    puts "\n<-- #{rss_url} -->"
+    rss.items[0..50].each do |item|
+        date = item.pubDate.to_datetime
+        if(date > range)
+            if(date > last_read)
+                puts "#{date.strftime("%m/%d %I:%M%p")} - " + item.title.yellow
+                puts ' - ' + item.link
+            else
+                puts "#{date.strftime("%m/%d %I:%M%p")} - " + item.title
+            end
         end
     end
 end
