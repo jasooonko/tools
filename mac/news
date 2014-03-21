@@ -6,14 +6,10 @@ require 'time'
 require 'colorize'
 require 'optparse'
 
-feeds = {   most_recent:    'http://s31.dlnws.com/dealnews/rss/todays-edition.xml',
-            most_popular:   'http://s31.dlnws.com/dealnews/rss/popular.xml',
-            editor_choice:  'http://s31.dlnws.com/dealnews/rss/editors-choice.xml',
-            techbargains:   'http://www.techbargains.com/rss.xml',
-            slickdeals:     'http://feeds.feedburner.com/SlickdealsnetForums-9?format=xml',
-            fatwallet:      'http://feeds.feedburner.com/FatwalletHotDeals?format=xml',
+feeds = {   google_news:   'https://news.google.com/?output=rss',
+            nytimes:       'http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
         }
-config_file = 'dealnews.conf'
+config_file = 'news.conf'
 
 params = {}
 opt_parser = OptionParser.new do |opt|
@@ -35,10 +31,11 @@ opt_parser = OptionParser.new do |opt|
     end
 end
 opt_parser.parse!
+puts params
 if(params.has_key?(:rss) && feeds.has_key?(params[:rss].to_sym))
     params[:rss] = [feeds[params[:rss].to_sym]]
 else
-    params[:rss] = [feeds[:most_popular], feeds[:techbargains], feeds[:fatwallet]]
+    params[:rss] = [feeds[:google_news], feeds[:nytimes]]
 end
 begin
     last_read = DateTime.strptime(File.read(config_file),'%FT%T%:z')
