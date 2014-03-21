@@ -1,0 +1,47 @@
+#!/usr/bin/env ruby 
+
+require 'tlsmail'  
+require 'time'
+require 'yaml'
+require 'optparse'
+
+CONFIG = YAML.load_file("/Users/ko/.config/gmail.yaml")['config']
+
+params = {}
+opt_parser = OptionParser.new do |opt|
+    opt.banner = "Usage:"
+    opt.separator "     gmail -r <recipient_email> -t <title> -m <message>"
+    opt.separator  "Parameters"
+
+    opt.on("-r","--recipient <email>","Recipient email") do |value|
+        params[:email] = value
+    end
+
+    opt.on("-t","--title <title>", "email title") do |value|
+        params[:title] = value
+    end
+     opt.on("-m","--message <message>", "email message") do |value|
+        params[:message] = value
+    end
+
+    opt.on("-h","--help","help") do
+        puts opt_parser
+        exit 1
+    end
+end
+opt_parser.parse!
+
+content = <<EOF  
+From: jasooonko1@gmail.com  
+To: #{CONFIG[:email]} 
+Subject: #{params[:title]} 
+Date: #{Time.now.rfc2822}  
+
+#{params[:message]}
+
+EOF
+
+Net::SMTP.enable_tls(OpenSSL::SSL::VERIFY_NONE)  
+Net::SMTP.start('smtp.gmail.com', 587, 'gmail.com', CONFIG['username'], CONFIG['password'], :login) do |smtp|  
+    smtp.send_message(content, CONFIG['username'], params[:email])  
+end  
