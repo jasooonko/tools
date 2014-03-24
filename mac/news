@@ -31,11 +31,11 @@ opt_parser = OptionParser.new do |opt|
     end
 end
 opt_parser.parse!
-puts params
+puts "parmas: #{params}"
 if(params.has_key?(:rss) && feeds.has_key?(params[:rss].to_sym))
     params[:rss] = [feeds[params[:rss].to_sym]]
 else
-    params[:rss] = [feeds[:google_news], feeds[:nytimes]]
+    params[:rss] = [feeds[:nytimes]]
 end
 begin
     last_read = DateTime.strptime(File.read(config_file),'%FT%T%:z')
@@ -53,7 +53,7 @@ File.open(config_file, 'w') {|f| f.write(DateTime.now)}
 params[:rss].each do |rss_url|
     rss = RSS::Parser.parse(rss_url, false)
     puts "\n<-- #{rss_url} -->"
-    rss.items[0..50].each do |item|
+    rss.items[0..20].each do |item|
         date = item.pubDate.to_datetime
         if(date > range)
             if(date > last_read)
