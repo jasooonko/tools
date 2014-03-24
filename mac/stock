@@ -1,5 +1,5 @@
 #!/bin/bash
-stocks=( 'GOOG' 'FB' 'MSFT' 'TSLA' 'WMT' 'TWTR')
+stocks=( 'GOOG' 'FB' 'MSFT' 'TSLA' 'WMT' 'TWTR' 'NEUL')
 
 for i in "${stocks[@]}"
 do
