@@ -7,6 +7,7 @@ require 'colorize'
 require 'optparse'
 
 feeds = {   google_news:   'https://news.google.com/?output=rss',
+            google_news_tw:'http://news.google.com.tw/news?pz=1&cf=all&ned=tw&hl=zh-TW&output=rss',
             nytimes:       'http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
         }
 config_file = "#{ENV['HOME']}/.config/news.conf"
@@ -35,7 +36,7 @@ puts "parmas: #{params}"
 if(params.has_key?(:rss) && feeds.has_key?(params[:rss].to_sym))
     params[:rss] = [feeds[params[:rss].to_sym]]
 else
-    params[:rss] = [feeds[:nytimes]]
+    params[:rss] = [feeds[:nytimes],feeds[:google_news_tw]]
 end
 begin
     last_read = DateTime.strptime(File.read(config_file),'%FT%T%:z')
