@@ -34,7 +34,13 @@ cal = Google::Calendar.new(:username => CONFIG['username'],
 today = DateTime.now
 max = DateTime.now + 3
 
-events = cal.find_events_in_range(today, max) 
+events = cal.find_events_in_range(today, max)
+if(events == nil || events.empty?)
+    puts ''
+    puts '  <<   Nothing Scheduled YAY! \O/   >>'.blue
+    puts ''
+    exit
+end
 events.sort! { |a,b| a.start_time <=> b.start_time }
 cur_day = today.to_date
 new_day = max.to_date
