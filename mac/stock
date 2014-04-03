@@ -50,7 +50,7 @@ stocks = {  'FB'    => 40.01,
             'TWTR'  => 64.16,
             'NEUL'  => 0.91,
             'GOOG'  => 0,
-            'APPL'  => 0,
+            'AAPL'  => 0,
         }
 
 StockMarket.print_quote_list stocks
