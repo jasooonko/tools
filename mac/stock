@@ -1,8 +1,57 @@
-#!/bin/bash
-stocks=( 'GOOG' 'FB' 'MSFT' 'TSLA' 'WMT' 'TWTR' 'NEUL')
+#!/usr/bin/env ruby
 
-for i in "${stocks[@]}"
-do
-    echo $i : $`curl -s "http://download.finance.yahoo.com/d/quotes.csv?s=$i&f=l1"`
-done
+require 'rubygems'
+require 'net/http'
+require 'colorize'
+
+class StockMarket
+
+    def self.quote(tickers)
+
+        if tickers.class == "Array"
+            quotes = tickers.join(",")
+        else
+            quotes = tickers
+        end
+        result = Net::HTTP.get(URI.parse("http://download.finance.yahoo.com/d/quotes.csv?s=#{quotes}&f=sl1d1t1c1ohgv&e=.csv")).gsub(/"/, "").split(",")
+        {:ticker => result[0], :price => result[1], :date => result[2], :time => result[3], :change => result[4]}
+    end
+    def self.method_missing(method, *args)
+        quote(method)
+    end
+    def self.print_quote(tickers, purchase_price)
+        quote = quote(tickers)
+        if(quote[:price].to_i < purchase_price)
+            print " - ".red
+        else
+            print " + " 
+        end
+            printf("%-6s $%s", quote[:ticker], quote[:price])
+        if(quote[:change].to_f > 0)
+            puts " (#{quote[:change]})".blue
+        elsif(quote[:change].to_f < 0)
+            puts " (#{quote[:change]})".red
+        else
+            puts " (#{quote[:change]})".blue
+        end    
+    end
+    def self.print_quote_list(stock_list)
+        puts stock_list
+        stock_list.each{ |key, value|
+            print_quote(key, value)
+        }
+    end
+end
+
+stocks = {  'FB'    => 40.01, 
+            'MSFT'  => 37.36,
+            'TSLA'  => 249.60,
+            'WMT'   => 80.54,
+            'TWTR'  => 64.16,
+            'NEUL'  => 0.91,
+            'GOOG'  => 0,
+            'APPL'  => 0,
+        }
+
+StockMarket.print_quote_list stocks
 
