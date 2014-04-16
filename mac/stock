@@ -53,6 +53,8 @@ stocks = {  'FB'    => 40.01,
             'NEUL'  => 0.91,
             'GOOG'  => 0,
             'AAPL'  => 0,
+            'KO'    => 0,
+            'JNJ'   => 0,
         }
 
 StockMarket.print_quote_list stocks
