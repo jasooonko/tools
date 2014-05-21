@@ -1,0 +1,9 @@
+IP=`wget -q -O - checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//'`
+HOST=`hostname`
+DATE=`date +"%Y-%m-%d %H:%M"`
+echo $DATE,$HOST,$IP
+echo $DATE,$HOST,$IP >> ip_list.txt
+
+tail -n 20 ip_list.txt > ip_list.tmp
+cat ip_list.tmp > ip_list.txt
+rm -f ip_list.tmp
