@@ -1,0 +1,52 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+source_dir = '/Users/jasonko/OneDrive/ScanSnap'
+source_files = Dir["#{source_dir}/*.pdf"]
+
+archive_bill = '/Users/jasonko/OneDrive/ScanSnap/bills'
+archive_health = '/Users/jasonko/OneDrive/ScanSnap/health' 
+archive_bank = '/Users/jasonko/OneDrive/ScanSnap/bank_statements'
+
+source_files.each do |file|
+  
+  if (file =~ /amazoncard-|americanexpresscard-|citicard-|conedison-|honda-|gieco-|statefarm-|target-|tmobile-|timewarner-|verizon-|water-/)
+    if(file =~ /-2014/)
+      FileUtils.mv("#{file}", "#{archive_bill}/2014/")
+      puts "bill: #{file}"
+    elsif(file =~ /-2015/)
+      FileUtils.mv("#{file}", "#{archive_bill}/2015/")
+      puts "bill: #{file}"
+    else
+      puts "[not moved] #{file}"
+    end
+  end
+
+  if (file =~ /chase-|americanexpressbank-|shinhanbank-|tiaacref-/)
+    if(file =~ /-2014/)
+      FileUtils.mv("#{file}", "#{archive_bank}/2014/")
+      puts "bank: #{file}"
+    elsif(file =~ /-2015/)
+      FileUtils.mv("#{file}", "#{archive_bank}/2015/")
+      puts "bank: #{file}"
+    else
+      puts "[not moved] #{file}"
+    end
+  end
+  
+  if (file =~ /metlife-|northshore-|sun_life_financial-|united_healthcare-/)
+    if(file =~ /-2014/)
+      FileUtils.mv("#{file}", "#{archive_health}/2014/")
+      puts "health: #{file}"
+    elsif(file =~ /-2015/)
+      FileUtils.mv("#{file}", "#{archive_health}/2015/")
+      puts "health: #{file}"
+    else
+      puts "[not moved] #{file}"
+    end
+  end
+
+
+#FileUtils.mv('/tmp/your_file', '/opt/new/location/your_file')
+
+end
