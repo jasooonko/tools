@@ -7,73 +7,42 @@ source_files = Dir["#{source_dir}/*.pdf"]
 file_types = { 
                'amazoncard' => 'creditcard',
                'amerasiabank' => 'bank_statements',
+               'ameriprise' => 'finance',
                'axa' => 'finance',
                'discover_sm' => 'creditcard',
                'equitable' => 'finance',
                'iba' => 'health',
+               'johnhancock' => 'finance',
+               'jason' => 'personal',
                'lij_medical' => 'health',
                'northern_obgym' => 'health',
+               'nys_dmv' => 'car',
+               'nycfinance' => 'bills',
+               'river_source_life_insurance' => 'insurance',
+               'shangmin' => 'personal',
+               'target' => 'bill',
                'ticket' => 'car',
              }
 
-archive_bill = '/Users/jasonko/OneDrive/ScanSnap/bills'
-archive_health = '/Users/jasonko/OneDrive/ScanSnap/health' 
-archive_bank = '/Users/jasonko/OneDrive/ScanSnap/bank_statements'
-
 source_files.each do |file|
+  puts "Process: #{file}"
   prefix = File.basename(file).split('-')[0]
   year = File.basename(file).split('-')[-1][0,4]
   type = file_types[prefix]
 
   destination = "#{source_dir}/#{type}/#{year}/"
   unless File.directory?(destination)
-    puts "MKDIR: #{destination}"
-    FileUtils.mkdir_p(destination)
+    puts type
+    if(type != nil)
+      puts "MKDIR: #{destination}"
+      FileUtils.mkdir_p(destination)
+    else 
+      puts 'unknown type'
+    end
   end
   if(type != nil)
     puts "MOVE - #{type}: #{file}"
     FileUtils.mv("#{file}", destination)    
   end
-
-#  if (file =~ /amazoncard-|americanexpresscard-|citicard-|conedison-|honda-|gieco-|statefarm-|target-|tmobile-|timewarner-|verizon-|water-/)
-#    if(file =~ /-2014/)
-#      FileUtils.mv("#{file}", "#{archive_bill}/2014/")
-#      puts "bill: #{file}"
-#    elsif(file =~ /-2015/)
-#      FileUtils.mv("#{file}", "#{archive_bill}/2015/")
-#      puts "bill: #{file}"
-#    else
-#      puts "[not moved] #{file}"
-#    end
-#  end
-#
-#  if (file =~ /chase-|americanexpressbank-|shinhanbank-|tiaacref-/)
-#    if(file =~ /-2014/)
-#      FileUtils.mv("#{file}", "#{archive_bank}/2014/")
-#      puts "bank: #{file}"
-#    elsif(file =~ /-2015/)
-#      FileUtils.mv("#{file}", "#{archive_bank}/2015/")
-#      puts "bank: #{file}"
-#    else
-#      puts "[not moved] #{file}"
-#    end
-#  end
-# 
-#
-#  # HEALTH
-#  if (file =~ /highmark-|metlife-|northshore-|sun_life_financial-|united_healthcare-/)
-#    if(file =~ /-2014/)
-#      FileUtils.mv("#{file}", "#{archive_health}/2014/")
-#      puts "health: #{file}"
-#    elsif(file =~ /-2015/)
-#      FileUtils.mv("#{file}", "#{archive_health}/2015/")
-#      puts "health: #{file}"
-#    else
-#      puts "[not moved] #{file}"
-#    end
-#  end
-
-
-#FileUtils.mv('/tmp/your_file', '/opt/new/location/your_file')
 
 end
