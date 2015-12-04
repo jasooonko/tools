@@ -1,0 +1,15 @@
+echo $1
+if [ $1 = 'start' ]; then
+  sudo /Users/jasonko/Dropbox/repos/bamazon/others/finto/finto -config='/Users/jasonko/Dropbox/repos/bamazon/others/finto/.fintorc' -creds='/Users/jasonko/.aws/credentials'
+elif [ $1 = 'roles' ]; then
+  curl localhost:80/roles
+elif [ $1 = 'active' ]; then
+  curl 'localhost:80/roles?status=active'
+elif [ $1 = 'set' ]; then
+  echo $2
+  curl -XPUT -d "{\"alias\":\"$2\"}" localhost:80/roles
+else
+  echo unknown $1
+  echo usage: finto (start|active|set)
+fi
+

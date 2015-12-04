@@ -1,13 +1,1 @@
-#!/usr/bin/env ruby
-
-require 'yaml'
-
-ARGV.each do |file|
-  puts file
-  begin
-    YAML.load_file(file)
-  rescue Exception => e
-    puts "ERROR: #{e.message} \n"
-    exit 0
-  end
-end
+/Users/jasonko/Dropbox/repos/bamazon/bamazon-coreeng/yaml-style-checker/validate_style.rb
